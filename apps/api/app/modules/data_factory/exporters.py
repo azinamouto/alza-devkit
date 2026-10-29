@@ -36,6 +36,11 @@ def export_households(dataset: HouseholdDataset, format: ExportFormat) -> bytes:
 
 
 def export_records(dataset: dict, fields: list[str], format: ExportFormat, title: str = "Synthetic dataset") -> bytes:
+    if not dataset or "data" not in dataset:
+        raise ValueError("Invalid dataset: missing data field")
+    if not fields:
+        raise ValueError("Field list cannot be empty")
+
     if format == "json":
         return json.dumps(dataset, ensure_ascii=False, indent=2).encode("utf-8")
 
@@ -50,7 +55,7 @@ def export_records(dataset: dict, fields: list[str], format: ExportFormat, title
         writer.writerows(rows)
         return output.getvalue().encode("utf-8-sig")
     if format != "xlsx":
-        raise ValueError("Unsupported export format.")
+        raise ValueError(f"Unsupported export format: {format}")
 
     workbook = Workbook()
     sheet = workbook.active
@@ -71,6 +76,8 @@ def export_records(dataset: dict, fields: list[str], format: ExportFormat, title
     try:
         workbook.save(output)
         return output.getvalue()
+    except Exception as exc:
+        raise ValueError(f"Failed to export Excel file: {str(exc)}") from exc
     finally:
         workbook.close()
         output.close()
