@@ -1,5 +1,6 @@
 
 import random
+from typing import Literal
 
 from faker import Faker
 
@@ -12,6 +13,8 @@ BARANGAYS = [
     "Fictional Sample Barangay C",
     "Fictional Sample Barangay D",
 ]
+
+IncomeCategory = Literal["Low", "Middle", "High"]
 
 
 def generate_households(
@@ -34,11 +37,11 @@ def generate_households(
         monthly_income = rng.randint(3000, 80000)
 
         if monthly_income < 12000:
-            income_category = "Low"
+            income_category: IncomeCategory = "Low"
         elif monthly_income < 40000:
-            income_category = "Middle"
+            income_category: IncomeCategory = "Middle"
         else:
-            income_category = "High"
+            income_category: IncomeCategory = "High"
 
         household: HouseholdRecord = {
             "household_id": f"HH-{index:05d}",
