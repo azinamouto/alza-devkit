@@ -35,7 +35,6 @@ def numeric_limits(field):
     high = int((Decimal(str(o.max)) * scale).to_integral_value(rounding=ROUND_FLOOR))
     return low, high, scale
 
-
 def number(ctx, field, index):
     low, high, scale = numeric_limits(field)
     value = ctx.rng.randint(low, high)
