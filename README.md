@@ -135,6 +135,13 @@ npm run dev -- --hostname 127.0.0.1
 
 Copy `apps/web/.env.example` to `apps/web/.env.local` if you need to configure `NEXT_PUBLIC_API_BASE_URL`.
 
+**Troubleshooting**
+
+- **Port conflicts**: If port 8000 or 3000 is already in use, modify the port in the startup commands.
+- **uv not found**: Install uv from https://docs.astral.sh/uv/ before running the backend.
+- **npm errors**: Ensure Node.js 18+ is installed. Run `npm ci` to clean install dependencies.
+- **Database not persisting**: Set `DATA_FACTORY_DB` environment variable to an absolute path before starting the API.
+
 ## Generate a Dataset
 
 Open **Mock Data Factory** and select either **Household Dataset** or **Custom Dataset**. The custom builder lets you configure fields, validate constraints, generate records, preview results, and export files. Save custom templates to reuse them after restarting the application.
