@@ -21,9 +21,9 @@ def storage_call(action):
     try:
         return action()
     except KeyError:
-        raise HTTPException(404, "Template not found") from None
+        raise HTTPException(404, "Template not found. Please check the template ID and try again.") from None
     except (sqlite3.Error, OSError):
-        raise HTTPException(503, "Template storage is unavailable") from None
+        raise HTTPException(503, "Template storage is unavailable. Please check if the database file is accessible.") from None
 
 
 @router.get("/custom/field-types", response_model=list[str])
@@ -41,9 +41,9 @@ def checked_generate(request):
     try:
         return generate_custom(request)
     except ValueError as exc:
-        raise HTTPException(422, str(exc)) from None
+        raise HTTPException(422, f"Validation error: {str(exc)}. Please check your field configurations.") from None
     except OverflowError:
-        raise HTTPException(422, "Generated value exceeds supported range") from None
+        raise HTTPException(422, "Generated value exceeds supported range. Please adjust your field constraints.") from None
 
 
 @router.post("/custom/validate", response_model=ValidationResult)

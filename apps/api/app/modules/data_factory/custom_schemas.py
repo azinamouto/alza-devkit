@@ -36,7 +36,12 @@ class Options(StrictModel):
             raise ValueError("Minimum must not exceed maximum")
         if any(len(v) > 256 for v in self.values) or len(set(self.values)) != len(self.values):
             raise ValueError("Enum values must be distinct and at most 256 characters")
-        if self.weights is not None and (len(self.weights) != len(self.values) or any(w < 0 for w in self.weights) or not math.isfinite(sum(self.weights)) or sum(self.weights) <= 0):
+        if self.weights is not None and (
+            len(self.weights) != len(self.values)
+            or any(w < 0 for w in self.weights)
+            or not math.isfinite(sum(self.weights))
+            or sum(self.weights) <= 0
+        ):
             raise ValueError("Weights must match values, be non-negative, and have a positive total")
         return self
 
@@ -77,7 +82,10 @@ class CustomField(StrictModel):
             raise ValueError("Required fields cannot have a null probability")
         if self.type == "enum" and not self.options.values:
             raise ValueError("Enum requires values")
-        if self.type in INTEGER and (not float(self.options.min).is_integer() or not float(self.options.max).is_integer()):
+        if self.type in INTEGER and (
+            not float(self.options.min).is_integer()
+            or not float(self.options.max).is_integer()
+        ):
             raise ValueError("Integer bounds must be whole numbers")
         if self.type in SEQUENCES and self.unique and self.options.step == 0:
             raise ValueError("Unique sequences require a nonzero increment")

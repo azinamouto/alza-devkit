@@ -12,6 +12,21 @@ class Token:
 
 
 def tokenize(sql):
+    """Tokenize PostgreSQL DDL SQL into structured tokens for parsing.
+    
+    This function handles:
+    - Single-line comments (--)
+    - Multi-line comments (/* */)
+    - Quoted strings (single and double quotes)
+    - Identifiers and keywords
+    - Numbers and symbols
+    - Parenthesis depth tracking
+    
+    Limits enforced:
+    - SQL size: 256 KB UTF-8 bytes
+    - Token length: 4096 characters
+    - Comment nesting: 32 levels
+    """
     if len(sql.encode("utf-8")) > 262144:
         raise ValueError("SQL exceeds 256 KB")
     tokens, i, depth = [], 0, 0
@@ -99,6 +114,17 @@ NUMBERS = {"integer", "bigint", "smallint", "serial", "bigserial", "numeric", "d
 
 
 def mapping(column):
+    """Suggest appropriate field generator based on column type and name.
+    
+    This function maps PostgreSQL column types to synthetic data generators:
+    - Serial types -> sequence generators
+    - Numeric types -> integer or decimal generators
+    - Recognized column names (quantity, price) -> specific generators
+    - Text types -> string generators with length constraints
+    - Date/timestamp types -> date generators
+    - Boolean type -> boolean generator
+    - UUID type -> UUID generator
+    """
     kind = column["database_type"]
     name = column["name"].lower()
     options = {}

@@ -13,11 +13,13 @@ Seed = Annotated[int, Query(ge=0, description="Seed for repeatable generation")]
 
 @router.get("/households", response_model=HouseholdDataset)
 def households(count: Count = 100, seed: Seed = 42) -> HouseholdDataset:
+    """Generate synthetic household records with Filipino-style names."""
     return HouseholdDataset(total_records=count, seed=seed, data=generate_households(count, seed))
 
 
 @router.get("/households/export")
 def export(count: Count = 100, seed: Seed = 42, format: ExportFormat = "csv") -> Response:
+    """Export synthetic household records in various formats (CSV, JSON, XLSX)."""
     dataset = households(count, seed)
     return Response(
         content=export_households(dataset, format),

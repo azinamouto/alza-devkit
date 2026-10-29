@@ -1,4 +1,20 @@
 
+"""
+ALZA DevKit API - Main Application Entry Point
+
+This FastAPI application provides the backend for the ALZA DevKit platform,
+which includes:
+- Mock Data Factory: Synthetic household data generation
+- Custom Dataset Builder: Configurable data generation with templates
+- Database Schema Importer: PostgreSQL DDL parsing and synthetic data generation
+
+Architecture:
+- API routes are organized under /api/v1/
+- CORS is enabled for the Next.js frontend
+- Request limits are enforced via middleware
+- SQLite is used for persistent template storage
+"""
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.data_factory import router as data_factory_router

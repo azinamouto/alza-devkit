@@ -1,12 +1,54 @@
 export type CustomField = {
-  name: string; label: string; type: string; required: boolean; unique: boolean;
-  default?: string | number | boolean | null; null_probability: number;
+  name: string;
+  label: string;
+  type: string;
+  required: boolean;
+  unique: boolean;
+  default?: string | number | boolean | null;
+  null_probability: number;
   options: Record<string, string | number | string[] | number[] | null>;
   computed?: { operation: "multiply" | "age" | "full_name"; sources: string[]; reference_date?: string } | null;
 };
-export type Template = { id?: string; name: string; description: string; version: 1; locale: string; fields: CustomField[] };
-export type CustomRequest = { template: Template; count: number; seed: number };
-export type CustomDataset = { total_records: number; seed: number; fields: string[]; data: Record<string, string | number | boolean | null>[] };
+
+export type Template = {
+  id?: string;
+  name: string;
+  description: string;
+  version: 1;
+  locale: string;
+  fields: CustomField[];
+};
+
+export type CustomRequest = {
+  template: Template;
+  count: number;
+  seed: number;
+};
+
+export type CustomDataset = {
+  total_records: number;
+  seed: number;
+  fields: string[];
+  data: Record<string, string | number | boolean | null>[];
+};
+
+export type FieldOptions = {
+  min?: number;
+  max?: number;
+  precision?: number;
+  min_length?: number;
+  max_length?: number;
+  prefix?: string;
+  suffix?: string;
+  values?: string[];
+  weights?: number[];
+  min_date?: string;
+  max_date?: string;
+  format?: string;
+  start?: number;
+  step?: number;
+  padding?: number;
+};
 
 export const newField = (name = "field_1", type = "string"): CustomField => ({ name, label: "", type, required: true, unique: false, null_probability: 0, options: {} });
 export const presets: Template[] = [

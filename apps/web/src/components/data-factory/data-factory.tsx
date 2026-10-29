@@ -18,11 +18,30 @@ export function DataFactory() {
 
   async function generate(config: GenerationConfig) {
     if (inFlight.current) return;
+    
+    // Validate config parameters
+    if (!config || typeof config !== 'object') {
+      setError("Invalid configuration object");
+      return;
+    }
+    if (typeof config.count !== 'number' || config.count < 1 || config.count > 1000) {
+      setError("Count must be between 1 and 1000");
+      return;
+    }
+    if (typeof config.seed !== 'number' || config.seed < 0) {
+      setError("Seed must be a non-negative number");
+      return;
+    }
+    
     inFlight.current = true;
     setBusy(true);
     setError("");
     try {
-      setDataset(await generateHouseholds(config));
+      const result = await generateHouseholds(config);
+      if (!result || !result.data) {
+        throw new Error("Invalid response from API");
+      }
+      setDataset(result);
       setGeneration((value) => value + 1);
     } catch (error) {
       setError(error instanceof Error ? error.message : "Generation failed. Please try again.");

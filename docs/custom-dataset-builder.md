@@ -135,6 +135,40 @@ Playwright is an ephemeral test dependency. The custom browser script creates an
 
 Verified during implementation: 127 backend tests, TypeScript, ESLint, production build, the existing household browser script, and the custom builder browser script passed. A saved template was also loaded after an actual API process restart and generated 100 records successfully. The existing Starlette/HTTPX test-client deprecation warning remains.
 
+## Troubleshooting
+
+### Template not saving
+- Check that the SQLite database file is writable
+- Verify the `DATA_FACTORY_DB` environment variable points to a valid path
+- Ensure the application has file system permissions for the database directory
+
+### Generation fails with "Template not found"
+- This error occurs when attempting to retrieve a template that doesn't exist
+- Verify the template UUID is correct
+- Check if the template was deleted from a different session
+
+### Export download not working
+- Ensure the generation was successful before attempting to export
+- Check browser popup blockers are not preventing the download
+- Verify the API server is running and accessible
+
+### Validation errors on computed fields
+- Computed fields require valid source field names
+- Ensure source fields exist in the template
+- Check that source field types are compatible with the operation
+- For "age" operation, ensure reference_date is provided in ISO format
+
+### Unique constraint failures
+- Reduce the requested count or increase the domain size
+- Check that min/max ranges allow enough unique values
+- For enums, ensure enough distinct values are available
+- Numeric unique fields may fail if the range is too small
+
+### Slow generation with many fields
+- Generation time scales with field count and row count
+- Consider breaking large datasets into smaller templates
+- Unique constraints require additional validation time
+
 ## Limits and future work
 
 - 50 fields, 1,000 rows, 256 KB request body, 1,024 characters per generated value, and 10 MB compact row output per request. Exports are in memory and may be larger than compact JSON due to formatting/encoding.

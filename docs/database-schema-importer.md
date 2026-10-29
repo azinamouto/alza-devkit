@@ -244,6 +244,39 @@ INSERT export or direct database insertion is provided.
 - Local SQLite configuration storage has no users, revision history or concurrent
   edit conflict resolution. Requests generate and export in memory.
 
+## Best practices
+
+### Schema preparation
+- Trim PostgreSQL dumps to only the `CREATE TABLE`, `CREATE TYPE AS ENUM`, and
+  `ALTER TABLE ADD` statements you need
+- Remove views, indexes, triggers, and functions before importing
+- Ensure foreign key relationships are clearly defined with proper types
+- Keep table and column names under 63 characters for compatibility
+
+### Configuration management
+- Save configurations after successful validation to avoid losing work
+- Use descriptive names for saved schemas to easily identify them later
+- Export configurations as JSON for version control or sharing
+- Set the `DATA_FACTORY_DB` environment variable to a durable path for persistence
+
+### Generation optimization
+- Start with smaller row counts (10-50) to validate mappings before scaling up
+- Review suggested field mappings and adjust them to match your use case
+- Ensure parent tables are selected when generating tables with foreign keys
+- Use the validation step to catch relationship and constraint issues early
+
+### Data quality
+- Review the generated preview data before exporting full datasets
+- Adjust numeric ranges and string lengths to match realistic data patterns
+- Use appropriate date ranges for your specific use case
+- Consider using sequences for primary keys to ensure uniqueness
+
+### Export workflows
+- Choose JSON for full metadata preservation and programmatic consumption
+- Use CSV ZIP when you need separate files per table with a manifest
+- Select Excel for manual review and spreadsheet-based workflows
+- Verify exported data size stays within your system's limits
+
 ## Repeatable release verification
 
 Run backend tests and frontend checks:

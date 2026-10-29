@@ -30,6 +30,47 @@ Only the household preset is implemented. All data is synthetic; income categori
 are illustrative. CSV and Excel neutralize spreadsheet formulas in text values.
 JSON retains the API envelope, including `synthetic: true`.
 
+## API Examples
+
+### Generate 50 household records with custom seed
+
+```http
+GET /api/v1/data-factory/households?count=50&seed=123
+```
+
+### Export 200 households as Excel
+
+```http
+GET /api/v1/data-factory/households/export?count=200&seed=42&format=xlsx
+```
+
+### Generate maximum allowed records
+
+```http
+GET /api/v1/data-factory/households?count=1000&seed=999
+```
+
+## Response Format
+
+The API returns a JSON response with the following structure:
+
+```json
+{
+  "total_records": 100,
+  "seed": 42,
+  "data": [
+    {
+      "household_id": "HH-00001",
+      "household_head": "Juan Dela Cruz",
+      "barangay": "Fictional Sample Barangay A",
+      "household_size": 4,
+      "monthly_income": 25000,
+      "income_category": "Middle"
+    }
+  ]
+}
+```
+
 Checks:
 
 ```powershell
